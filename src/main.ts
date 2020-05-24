@@ -24,6 +24,11 @@ async function main() {
         azPath = await io.which("az", true);
         await executeAzCliCommand("--version");
 
+        let cloud = core.getInput('cloud', { required: false });
+        if (!!cloud){
+            await executeAzCliCommand(`cloud set --name "${cloud}"`);
+        }
+
         let creds = core.getInput('creds', { required: true });
         let secrets = new SecretParser(creds, FormatType.JSON);
         let servicePrincipalId = secrets.getSecret("$.clientId", false);
